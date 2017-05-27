@@ -1,0 +1,15 @@
+{
+  "name": "tm-dropdown",
+  "description": "Polymer dropdown component that extends standard dropdown functionality",
+  "main": "tm-dropdown.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.4.0",
+    "vaadin-combo-box": "^1.3.3"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
+    "web-component-tester": "^6.0.0-prerelease.5",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+  }
+}

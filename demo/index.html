@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>tm-dropdown demo</title>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="../tm-dropdown.html">
+
+    <style is="custom-style" include="demo-pages-shared-styles">
+    </style>
+  </head>
+  <body>
+    <test-tm-dropdown></test-tm-dropdown>
+  </body>
+</html>
+
+
+
+<dom-module id="test-tm-dropdown">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <tm-dropdown items="[[items]]" item="{{item}}"
+        selected-item="{{selectedItem}}"
+        selected-value="{{selectedValue}}"
+        selected-index="{{selectedIndex}}"
+        label-attr="{{labelAttr}}"
+        value-attr="{{valueAttr}}"></tm-dropdown>
+    <paper-input label="Selected Item" value="{{item.value}}"></paper-input>
+    <paper-input label="Internal Selected Item" value="{{selectedItem.value}}"></paper-input>
+    <paper-input label="Selected Value" value="{{selectedValue}}"></paper-input>
+    <paper-input label="Selected Index" value="{{selectedIndex}}"></paper-input>
+    <paper-input label="Label Attribute" value="{{labelAttr}}"></paper-input>
+    <paper-input label="Value Attribute" value="{{valueAttr}}"></paper-input>
+  </template>
+  <script>
+    (function(Polymer) {
+      Polymer({
+        is: 'test-tm-dropdown',
+        properties: {
+          items: { type: Array, notify:true, value: [
+            {"label": "Hydrogen", "value": "H", aa:'(h)'},
+            {"label": "Helium", "value": "He", aa:'(he)'},
+            {"label": "Lithium", "value": "Li", aa:'(li)'}
+          ]},
+          item: { type: Object, notify:true },
+          selectedIndex: { type:Object, notify:true, value:'' },
+          selectedItem: { type:Object, notify:true, value:'' },
+          selectedValue: { type:String, notify:true, value:'' },
+          labelAttr: { type:String, notify:true, value:'label' },
+          valueAttr: { type:String, notify:true, value:'value' }
+        },
+        observers: [
+          'debug(list)'
+        ],
+        debug: function(object) {
+          console.log("DEMO DEBUG: ", object);
+        },
+        ready: function() {
+          console.log('Element test-tm-dropdown has been created.');
+        }
+      });
+    })(window.Polymer);
+  </script>
+</dom-module>

@@ -1,0 +1,88 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-combo-box/vaadin-combo-box.html">
+<link rel="import" href="../paper-input/paper-input.html">
+
+<!--
+`tm-dropdown`
+Polymer dropdown component that extends standard dropdown functionality
+
+@demo demo/index.html
+-->
+
+<dom-module id="tm-dropdown">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      span.selected-true {
+        font-weight: bold;
+      }
+    </style>
+    <vaadin-combo-box items="{{list}}" value="{{selectedValue}}" selected-item="{{selectedItem}}">
+      <template>
+        <span class$="selected-[[selected]] focused-[[focused]]" data-index$="[[index]]" data-value$="[[item.value]]">[[item.label]]</span>
+      </template>
+    </vaadin-combo-box>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'tm-dropdown',
+      properties: {
+        items: { type: Array, notify:true },
+        item: { type: Object, notify:true, computed: '_findSelectedItem(items,selectedIndex)' },
+        labelAttr: { type:String, notify:true, value: 'label'},
+        valueAttr: { type:String, notify:true, value: 'value'},
+        selectedItem: { type:Object, notify:true },
+        selectedValue: { type:String, notify:true },
+        selectedIndex: { type:String, notify:true, computed: '_findSelectedIndex(list,selectedItem)'},
+        list: { type: Array, notify:true, computed: '_createList(items)' },
+      },
+      observers: [
+        '_listChanged(list)',
+        '_debug(selectedIndex)'
+      ],
+      // convert the given list of items the format the vaadin combo needs.
+      _createList: function(items) {
+        if (items === undefined || items.length === 0) {
+          return [];
+        } else if (items[0] instanceof Object) {
+          return items.map(item => ({label:item[this.labelAttr],value:item[this.valueAttr]}));
+        } else {
+          return items.map(item => ({label:item,value:item}));
+        }
+      },
+      // listen for when the list of items change, and select the first item in the list.
+      _listChanged: function(list) {
+        console.log("LIST CHANGED: ", list);
+        if (list.length > 0) {
+          const self = this;
+          setTimeout(function() {
+            self.selectedItem = list[0];
+          }, 100);
+        }
+      },
+      // Find the selected item in the given list of items.
+      _findSelectedItem: function(items,selectedIndex) {
+        if (items === undefined || items === null || selectedIndex < 0 || selectedIndex > (items.length-1) ) {
+          return -1;
+        } else {
+          return items[selectedIndex];
+        }
+      },
+      // Find the index of the selected item in the internal model list.
+      _findSelectedIndex: function(list,selectedItem) {
+        if (list === undefined || list === null || selectedItem === undefined || selectedItem === null) {
+          return -1;
+        }
+        return list.indexOf(selectedItem);
+      },
+      _debug: function(object) {
+        console.log('--->>> DEBUG: ', object);
+      },
+      ready: function() {
+      }
+    });
+  </script>
+</dom-module>
