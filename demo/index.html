@@ -28,19 +28,51 @@
       :host {
         display: block;
       }
+      div {
+        box-sizing: border-box;
+        padding:10px;
+      }
+      div.dropdowns {
+        width:100%;
+      }
+      div.selection,div.fields {
+        width:50%;
+        float:left;
+      }
+      paper-input {
+        width:100%;
+      }
+      tm-dropdown {
+        width:50%;
+        float:left;
+      }
+      /*div.selection > tm-dropdown {
+        width:100%;
+      }*/
     </style>
-    <tm-dropdown items="[[items]]" item="{{item}}"
-        selected-item="{{selectedItem}}"
-        selected-value="{{selectedValue}}"
-        selected-index="{{selectedIndex}}"
-        label-attr="{{labelAttr}}"
-        value-attr="{{valueAttr}}"></tm-dropdown>
-    <paper-input label="Selected Item" value="{{item.value}}"></paper-input>
-    <paper-input label="Internal Selected Item" value="{{selectedItem.value}}"></paper-input>
-    <paper-input label="Selected Value" value="{{selectedValue}}"></paper-input>
-    <paper-input label="Selected Index" value="{{selectedIndex}}"></paper-input>
-    <paper-input label="Label Attribute" value="{{labelAttr}}"></paper-input>
-    <paper-input label="Value Attribute" value="{{valueAttr}}"></paper-input>
+
+    <div class="dropdowns">
+      <tm-dropdown items="[[items]]" item="{{item}}" label-attr="label" value-attr="[[valueAttr]]"
+          selected-value="{{selectedValue}}" selected-index="{{selectedIndex}}"></tm-dropdown>
+      <tm-dropdown items="[[items]]" item="{{item}}" label-attr="[[labelAttr]]" value-attr="[[valueAttr]]"
+          selected-value="{{selectedValue}}" selected-index="{{selectedIndex}}"></tm-dropdown>
+    </div>
+    <div class="selection">
+      <tm-dropdown items="[[attributes]]" item="{{labelAttr}}"></tm-dropdown>
+      <tm-dropdown items="[[attributes]]" item="{{valueAttr}}"></tm-dropdown>
+      <paper-input label="Selected Item" value="[[_selectedItemToString(item)]]"></paper-input>
+      <paper-input label="Selected Value" value="[[selectedValue]]"></paper-input>
+      <paper-input label="Selected Index" value="[[selectedIndex]]"></paper-input>
+    </div>
+    <div class="fields">
+      <paper-input label="Label" value="[[item.label]]"></paper-input>
+      <paper-input label="Value" value="[[item.value]]"></paper-input>
+      <paper-input label="Description" value="[[item.desc]]"></paper-input>
+      <paper-input label="Atomic Number" value="[[item.atomic]]"></paper-input>
+      <paper-input label="Atomic Mass" value="[[item.mass]]"></paper-input>
+      <paper-input label="Melting Point" value="[[item.melt]]"></paper-input>
+      <paper-input label="Boiling Point" value="[[item.boil]]"></paper-input>
+    </div>
   </template>
   <script>
     (function(Polymer) {
@@ -48,20 +80,24 @@
         is: 'test-tm-dropdown',
         properties: {
           items: { type: Array, notify:true, value: [
-            {"label": "Hydrogen", "value": "H", aa:'(h)'},
-            {"label": "Helium", "value": "He", aa:'(he)'},
-            {"label": "Lithium", "value": "Li", aa:'(li)'}
+            {"label": "Hydrogen", "value": "H", desc:'Hydrogen (H): 1', atomic:1, mass:1.0079, melt:-259, boil:-253 },
+            {"label": "Helium", "value": "He", desc:'Helium (He): 2', atomic:2, mass:4.0026, melt:-272, boil:-269 },
+            {"label": "Lithium", "value": "Li", desc:'Lithium (Li): 3', atomic:3, mass:6.941, melt:180, boil:1347 }
           ]},
           item: { type: Object, notify:true },
-          selectedIndex: { type:Object, notify:true, value:'' },
-          selectedItem: { type:Object, notify:true, value:'' },
-          selectedValue: { type:String, notify:true, value:'' },
-          labelAttr: { type:String, notify:true, value:'label' },
-          valueAttr: { type:String, notify:true, value:'value' }
+          selectedItem: { type:Object, notify:true },
+          selectedIndex: { type:Object, notify:true },
+          selectedValue: { type:String, notify:true },
+          labelAttr: { type:String, notify:true, value:'value' },
+          valueAttr: { type:String, notify:true, value:'value' },
+          attributes: { type:Array, notify:true, value: ['label','value','desc','atomic','mass'] }
         },
         observers: [
-          'debug(list)'
+          'debug(item)'
         ],
+        _selectedItemToString: function(object) {
+          return JSON.stringify(object);
+        },
         debug: function(object) {
           console.log("DEMO DEBUG: ", object);
         },
